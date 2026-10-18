@@ -1,0 +1,846 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Investment advisory case study prepared by Pisek Tussananakajit, AFPT.">
+  <meta name="theme-color" content="#07090d">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2307090d'/%3E%3Ccircle cx='32' cy='32' r='13' fill='%23f2f93c'/%3E%3Cellipse cx='32' cy='32' rx='25' ry='9' fill='none' stroke='%23f2f93c' stroke-width='3' transform='rotate(-20 32 32)'/%3E%3Ccircle cx='54' cy='25' r='3' fill='%23f5f7f2'/%3E%3C/svg%3E">
+  <title>Investment Mission | Client A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    /* Slides 14-16: embedded here so the requested update remains index.html-only. */
+    .scene-stylemap {
+      align-content: start;
+      padding-top: 94px;
+      background:
+        radial-gradient(circle at 77% 18%, rgba(242,249,60,.07), transparent 27%),
+        radial-gradient(circle at 18% 82%, rgba(76,183,255,.09), transparent 30%),
+        linear-gradient(145deg, #05090f, #0b1521);
+    }
+    .scene-stylemap .section-heading { margin-bottom: 16px; }
+    .scene-stylemap .section-heading h2 { max-width: none; font-size: clamp(2.35rem, 4vw, 4.8rem); }
+    .scene-stylemap .section-heading > p:last-child { max-width: 850px; }
+    .stylemap-scroll { width: 100%; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-color: rgba(242,249,60,.55) rgba(255,255,255,.06); }
+    .stylemap-chart { width: 100%; min-width: 850px; max-height: 66vh; display: block; }
+    .stylemap-chart .map-frame { fill: rgba(5,12,20,.76); stroke: rgba(151,174,193,.48); }
+    .stylemap-chart .map-grid { stroke: rgba(151,174,193,.28); stroke-width: 1; }
+    .stylemap-chart .map-label { fill: #dfe6ec; font: 700 13px "Space Mono", monospace; letter-spacing: .08em; }
+    .stylemap-chart .map-axis { fill: #82909c; font: 400 11px "Space Mono", monospace; letter-spacing: .12em; }
+    .stylemap-chart .map-note { fill: #82909c; font: 400 10px "Space Mono", monospace; }
+    .stylemap-chart .map-bubble {
+      transform-box: fill-box;
+      transform-origin: center;
+      transition: transform .28s ease, filter .28s ease;
+      outline: none;
+    }
+    .stylemap-chart .map-bubble:hover,
+    .stylemap-chart .map-bubble:focus { transform: scale(1.2); }
+    .stylemap-chart .map-bubble.aws:hover,
+    .stylemap-chart .map-bubble.aws:focus { filter: drop-shadow(0 0 13px #4cb7ff) drop-shadow(0 0 25px rgba(76,183,255,.65)); }
+    .stylemap-chart .map-bubble.dcm:hover,
+    .stylemap-chart .map-bubble.dcm:focus { filter: drop-shadow(0 0 13px var(--yellow)) drop-shadow(0 0 25px rgba(242,249,60,.62)); }
+    .stylemap-chart .aws circle { fill: rgba(76,183,255,.24); stroke: #4cb7ff; stroke-width: 2; }
+    .stylemap-chart .dcm circle { fill: rgba(242,249,60,.2); stroke: var(--yellow); stroke-width: 2; }
+    .stylemap-chart .bubble-name { fill: var(--ink); font: 700 10px "Space Mono", monospace; paint-order: stroke; stroke: #05090f; stroke-width: 3px; }
+    .stylemap-chart .bubble-weight { fill: #c8d2dc; font: 400 9px "Space Mono", monospace; paint-order: stroke; stroke: #05090f; stroke-width: 3px; }
+    .stylemap-mobile-note { display: none; margin: 5px 0 0; color: var(--muted-2); font: 700 .58rem "Space Mono", monospace; letter-spacing: .08em; }
+
+    .scene-ugis {
+      align-content: start;
+      padding-top: 96px;
+      background:
+        radial-gradient(circle at 76% 48%, rgba(84,199,255,.09), transparent 26%),
+        radial-gradient(circle at 18% 88%, rgba(242,249,60,.065), transparent 27%),
+        linear-gradient(145deg, #07090d 0%, #0a0f16 52%, #06080c 100%);
+    }
+    .ugis-heading { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 24px; align-items: end; margin-bottom: 22px; }
+    .ugis-heading h2 { max-width: 960px; margin: 0; font-size: clamp(2.45rem, 4.4vw, 5rem); line-height: .96; letter-spacing: -.06em; }
+    .ugis-heading h2 span { color: var(--yellow); }
+    .ugis-allocation { min-width: 174px; padding: 13px 17px; border: 1px solid rgba(242,249,60,.55); background: rgba(242,249,60,.07); text-align: right; }
+    .ugis-allocation span, .ugis-allocation strong { display: block; }
+    .ugis-allocation span { color: var(--muted); font: 700 .57rem "Space Mono", monospace; letter-spacing: .1em; }
+    .ugis-allocation strong { margin-top: 4px; color: var(--yellow); font: 700 2.05rem/1 "Orbitron", monospace; }
+    .ugis-grid { display: grid; grid-template-columns: minmax(290px,.8fr) minmax(520px,1.45fr); gap: 18px; }
+    .ugis-logic { display: grid; gap: 13px; }
+    .ugis-card, .ugis-cockpit { position: relative; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(17,26,37,.93), rgba(9,13,19,.92)); box-shadow: 0 22px 60px rgba(0,0,0,.23); }
+    .ugis-card { min-height: 186px; padding: 21px 23px; overflow: hidden; }
+    .ugis-card::after { content: ""; position: absolute; width: 100px; height: 100px; right: -51px; top: -51px; border: 1px solid rgba(242,249,60,.34); border-radius: 50%; }
+    .ugis-id { color: var(--yellow); font: 700 .61rem "Space Mono", monospace; letter-spacing: .1em; }
+    .ugis-card h3, .ugis-cockpit h3 { margin: 18px 0 8px; font-size: clamp(1.05rem,1.45vw,1.42rem); }
+    .ugis-card p, .ugis-cockpit p { margin: 0; color: #aeb6be; font-size: clamp(.78rem,.86vw,.93rem); line-height: 1.55; }
+    .ugis-bond-shift { display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end; margin-top: 14px; }
+    .ugis-bond-value span, .ugis-bond-value strong { display: block; }
+    .ugis-bond-value span { margin-bottom: 4px; color: var(--muted-2); font: 700 .52rem "Space Mono", monospace; letter-spacing: .08em; }
+    .ugis-bond-value strong { font: 700 clamp(1.55rem,2.35vw,2.55rem)/1 "Orbitron", monospace; }
+    .ugis-bond-value.after strong { color: var(--yellow); text-shadow: 0 0 16px rgba(242,249,60,.25); }
+    .ugis-bond-shift i { margin-bottom: 6px; color: var(--yellow); font: normal 1.1rem "Space Mono", monospace; }
+    .ugis-risk { margin-top: 15px; }
+    .ugis-risk-labels { display: flex; justify-content: space-between; margin-bottom: 7px; color: var(--muted-2); font: 700 .5rem "Space Mono", monospace; letter-spacing: .07em; }
+    .ugis-risk-track { height: 6px; overflow: hidden; background: rgba(255,255,255,.06); }
+    .ugis-risk-track span { display: block; width: 67%; height: 100%; background: linear-gradient(90deg,var(--yellow),#54c7ff); box-shadow: 0 0 13px rgba(84,199,255,.45); }
+    .ugis-risk-note { display: flex; gap: 8px; margin-top: 9px; color: #c9d0d5; font: 700 .58rem "Space Mono", monospace; }
+    .ugis-risk-note b { color: #54c7ff; }
+    .ugis-cockpit { min-height: 385px; padding: clamp(24px,2.7vw,38px); overflow: hidden; }
+    .ugis-cockpit-head { display: flex; justify-content: space-between; gap: 18px; align-items: flex-start; }
+    .ugis-chip { flex: 0 0 auto; padding: 7px 9px; color: var(--yellow); border: 1px solid rgba(242,249,60,.34); background: rgba(242,249,60,.06); font: 700 .54rem "Space Mono", monospace; letter-spacing: .06em; }
+    .ugis-formula { margin-top: 20px; padding: 18px; border: 1px solid rgba(84,199,255,.26); background: rgba(84,199,255,.045); text-align: center; transition: box-shadow .3s ease; }
+    .ugis-formula:hover { box-shadow: 0 0 38px rgba(84,199,255,.16), inset 0 0 30px rgba(84,199,255,.08); }
+    .ugis-formula span { display: block; margin-bottom: 9px; color: #54c7ff; font: 700 .55rem "Space Mono", monospace; letter-spacing: .1em; }
+    .ugis-formula div { font: 700 clamp(1.55rem,2.7vw,2.8rem)/1 "Orbitron", monospace; }
+    .ugis-formula small { font-size: .5em; }
+    .ugis-shocks { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1px; margin-top: 16px; border: 1px solid var(--line); background: var(--line); }
+    .ugis-shocks div { padding: 13px 15px; background: rgba(7,10,15,.86); }
+    .ugis-shocks span, .ugis-shocks strong, .ugis-shocks small { display: block; }
+    .ugis-shocks span { color: var(--muted-2); font: 700 .5rem "Space Mono", monospace; letter-spacing: .07em; }
+    .ugis-shocks strong { margin-top: 7px; font: 700 clamp(1.2rem,1.8vw,1.8rem)/1 "Orbitron", monospace; }
+    .ugis-shocks div:last-child strong { color: var(--yellow); }
+    .ugis-shocks small { margin-top: 5px; color: var(--muted); font-size: .57rem; }
+    .ugis-levers { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 15px; }
+    .ugis-levers > span { margin-right: 8px; color: var(--yellow); font: 700 .56rem "Space Mono", monospace; letter-spacing: .08em; }
+    .ugis-levers b { padding: 6px 9px; border: 1px solid var(--line); color: #c8d0d6; font: 700 .55rem "Space Mono", monospace; }
+    .ugis-decision { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; margin-top: 15px; padding: 13px 16px; border: 1px solid rgba(242,249,60,.28); background: linear-gradient(90deg,rgba(242,249,60,.12),rgba(242,249,60,.025)); }
+    .ugis-decision > span { color: var(--yellow); font: 700 .58rem "Space Mono", monospace; letter-spacing: .1em; }
+    .ugis-decision strong { font-size: .82rem; }
+    .ugis-decision small { color: var(--muted); font-size: .62rem; }
+    .ugis-source { margin: 10px 0 0; color: var(--muted-2); font: 400 .51rem/1.4 "Space Mono", monospace; }
+
+    .scene-frontier {
+      align-content: start;
+      padding-top: 94px;
+      background:
+        radial-gradient(circle at 42% 58%, rgba(242,249,60,.05), transparent 27%),
+        radial-gradient(circle at 68% 28%, rgba(84,199,255,.055), transparent 25%),
+        linear-gradient(145deg, #05090f, #08111b 58%, #05080d);
+    }
+    .scene-frontier .section-heading { margin-bottom: 20px; }
+    .scene-frontier .section-heading h2 { max-width: none; font-size: clamp(2.55rem,4.35vw,5rem); }
+    .scene-frontier .section-heading > p:last-child { max-width: 900px; }
+    .frontier-layout { display: grid; grid-template-columns: minmax(0,1fr) 255px; gap: 22px; align-items: stretch; }
+    .frontier-chart-scroll { min-width: 0; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-color: rgba(242,249,60,.5) rgba(255,255,255,.05); }
+    .frontier-chart-shell { min-width: 760px; height: min(56vh,550px); border: 1px solid rgba(151,174,193,.18); background: rgba(4,10,17,.48); box-shadow: inset 0 0 70px rgba(0,0,0,.28); }
+    .frontier-chart { width: 100%; height: 100%; display: block; }
+    .frontier-chart .ef-grid { stroke: rgba(151,174,193,.13); stroke-width: 1; }
+    .frontier-chart .ef-axis { stroke: #697987; stroke-width: 1.4; }
+    .frontier-chart .ef-tick { fill: #73808c; font: 400 10px "Space Mono", monospace; }
+    .frontier-chart .ef-axis-label { fill: #8c99a5; font: 700 11px "Space Mono", monospace; letter-spacing: .08em; }
+    .frontier-chart .ef-cml { fill: none; stroke: #54c7ff; stroke-width: 2.2; filter: drop-shadow(0 0 7px rgba(84,199,255,.32)); }
+    .frontier-chart .ef-frontier { fill: none; stroke: var(--yellow); stroke-width: 3; filter: drop-shadow(0 0 7px rgba(242,249,60,.28)); }
+    .frontier-chart .ef-guide { stroke: rgba(242,249,60,.24); stroke-width: 1; stroke-dasharray: 4 7; }
+    .frontier-chart .ef-marker-label { fill: var(--yellow); font: 700 13px "Space Mono", monospace; letter-spacing: .05em; }
+    .frontier-chart .ef-marker-detail { fill: #d7dde2; font: 400 10px "Space Mono", monospace; }
+    .frontier-chart .ef-marker-line { stroke: var(--yellow); stroke-width: 1.2; }
+    .radar-core { fill: #061018; stroke: #fff; stroke-width: 2; filter: drop-shadow(0 0 6px var(--yellow)); animation: radarBlink 1.1s ease-in-out infinite; }
+    .radar-core-dot { fill: var(--yellow); }
+    .radar-ring { fill: none; stroke: var(--yellow); stroke-width: 1.4; transform-box: fill-box; transform-origin: center; animation: radarPulse 2.1s ease-out infinite; }
+    .radar-ring.r2 { animation-delay: .7s; }
+    .radar-ring.r3 { animation-delay: 1.4s; }
+    .radar-cross { stroke: rgba(242,249,60,.72); stroke-width: 1; }
+    .radar-sweep { stroke: #54c7ff; stroke-width: 1.35; transform-box: view-box; transform-origin: 490px 280px; animation: radarSweep 2.8s linear infinite; filter: drop-shadow(0 0 5px rgba(84,199,255,.55)); }
+    .frontier-summary { display: flex; flex-direction: column; padding: 24px 22px; border: 1px solid rgba(151,174,193,.26); background: rgba(8,18,29,.88); }
+    .frontier-summary > span { color: var(--muted-2); font: 700 .57rem "Space Mono", monospace; letter-spacing: .1em; }
+    .frontier-summary > strong { margin-top: 11px; color: var(--yellow); font: 700 clamp(2rem,2.7vw,3rem)/1 "Orbitron", monospace; }
+    .frontier-summary > small { margin-top: 7px; color: #d5dce1; font: 700 .57rem "Space Mono", monospace; letter-spacing: .06em; }
+    .frontier-summary hr { width: 100%; margin: 22px 0; border: 0; border-top: 1px solid rgba(151,174,193,.24); }
+    .frontier-stat { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: baseline; margin-bottom: 13px; }
+    .frontier-stat span { color: var(--muted); font: 700 .53rem "Space Mono", monospace; letter-spacing: .06em; }
+    .frontier-stat b { color: var(--ink); font: 700 1rem "Orbitron", monospace; }
+    .frontier-objective { margin: auto 0 0; color: #dce2e6; font-size: .77rem; line-height: 1.55; }
+    .frontier-objective b { color: var(--yellow); }
+    .frontier-note { margin: 10px 0 0; color: var(--muted-2); font: 400 .5rem/1.4 "Space Mono", monospace; }
+
+    @keyframes radarPulse {
+      0% { transform: scale(.45); opacity: .9; }
+      75%, 100% { transform: scale(2.25); opacity: 0; }
+    }
+    @keyframes radarBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .42; }
+    }
+    @keyframes radarSweep { to { transform: rotate(360deg); } }
+
+    @media (max-width: 1100px) {
+      .stylemap-chart { min-width: 790px; }
+      .ugis-heading, .ugis-grid { grid-template-columns: 1fr; }
+      .ugis-allocation { justify-self: start; text-align: left; }
+      .ugis-logic { grid-template-columns: 1fr 1fr; }
+      .ugis-cockpit { min-height: auto; }
+      .ugis-decision { grid-template-columns: 1fr; gap: 6px; }
+      .frontier-layout { grid-template-columns: 1fr; }
+      .frontier-summary { display: grid; grid-template-columns: auto auto 1fr; gap: 8px 18px; align-items: center; }
+      .frontier-summary > strong { margin-top: 0; }
+      .frontier-summary > small { margin-top: 0; }
+      .frontier-summary hr { grid-column: 1 / -1; margin: 8px 0; }
+      .frontier-stat { margin: 0; }
+      .frontier-objective { grid-column: 1 / -1; margin-top: 4px; }
+    }
+    @media (max-width: 700px) {
+      .scene-stylemap, .scene-ugis, .scene-frontier { padding-top: 96px; }
+      .scene-stylemap .section-heading h2 { font-size: clamp(2.05rem,10vw,3rem); }
+      .stylemap-chart { min-width: 730px; max-height: none; }
+      .stylemap-mobile-note { display: block; }
+      .ugis-heading h2 { font-size: clamp(2.25rem,12vw,3.6rem); }
+      .ugis-allocation { width: 100%; }
+      .ugis-logic { grid-template-columns: 1fr; }
+      .ugis-cockpit-head { flex-direction: column; }
+      .ugis-shocks { grid-template-columns: 1fr; }
+      .scene-frontier .section-heading h2 { font-size: clamp(2.15rem,11vw,3.25rem); }
+      .frontier-chart-shell { min-width: 680px; height: 430px; }
+      .frontier-summary { display: flex; }
+      .frontier-summary hr { margin: 18px 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .stylemap-chart .map-bubble { transition: none; }
+      .radar-core, .radar-ring, .radar-sweep { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <header class="topbar">
+    <a class="brand" href="#advisor" aria-label="Return to the beginning">
+      <img class="brand-logo" src="./assets/finnomena-logo.png" width="234" height="150" alt="Finnomena">
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-title">ARM / INVESTMENT MISSION</span>
+    </a>
+    <div class="topbar-meta">
+      <span id="sectionCounter">01 / 18</span>
+      <span class="live-dot"></span>
+      <span>BRIEFING LIVE</span>
+    </div>
+  </header>
+
+  <nav class="rail" aria-label="Presentation chapters">
+    <a href="#advisor" data-section="advisor"><span>01</span>Advisor</a>
+    <a href="#client" data-section="client"><span>02</span>Client</a>
+    <a href="#portfolio" data-section="portfolio"><span>03</span>Portfolio</a>
+    <a href="#execution" data-section="execution"><span>04</span>Execution</a>
+  </nav>
+
+  <main>
+    <section class="scene scene-hero" id="advisor" data-chapter="advisor">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">SECTION 01 / MISSION ADVISOR</p>
+        <h1>Engineering precision.<br><span>Human guidance.</span></h1>
+        <p class="lead">I turn complex investment choices into a clear plan clients can understand, maintain, and stay invested in.</p>
+        <div class="identity">
+          <span>Investment Professional • Relationship Manager • Financial Content Creator</span>
+        </div>
+        <a class="text-link" href="https://www.youtube.com/@pisekinvestmentconsultant128/streams" target="_blank" rel="noreferrer">View investment broadcasts <span>↗</span></a>
+      </div>
+      <div class="portrait-wrap reveal" aria-label="Portrait of Pisek Tussananakajit">
+        <div class="portrait-frame">
+          <img src="./assets/arm-profile.webp" width="960" height="1200" alt="Pisek Arm Tussananakajit">
+        </div>
+        <div class="portrait-tag">
+          <strong>ARM</strong>
+          <span>Pisek Tussananakajit, AFPT™</span>
+          <small>Advisor profile</small>
+        </div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true"><span>SCROLL TO EXPLORE</span><i></i></div>
+    </section>
+
+    <section class="scene scene-track" data-chapter="advisor">
+      <div class="section-heading reveal">
+        <p class="eyebrow">FLIGHT RECORD</p>
+        <h2>A career built around analysis, trust, and execution.</h2>
+      </div>
+      <div class="career-grid reveal">
+        <article>
+          <span class="career-year">2015–19</span>
+          <h3>Aeronautical Engineering</h3>
+          <p>First-Class Honors. A foundation in systems thinking, quantitative analysis, and structured problem-solving.</p>
+        </article>
+        <article>
+          <span class="career-year">2019–21</span>
+          <h3>Toyota Auto Works</h3>
+          <p>Applied cost control and process improvement, contributing to approximately 4–5% logistics cost reduction.</p>
+        </article>
+        <article>
+          <span class="career-year">2021–23</span>
+          <h3>KASIKORN Securities</h3>
+          <p>Managed 352 investor relationships and approximately USD 1.7M AUM across equities, funds, bonds, and derivatives.</p>
+        </article>
+        <article>
+          <span class="career-year">2023–Now</span>
+          <h3>Exness</h3>
+          <p>Managed 500+ high-value relationships across acquisition, retention, education, and partner development.</p>
+        </article>
+      </div>
+      <div class="credentials reveal">
+        <span>Investment Planner License No. 115045</span>
+        <span>AFPT™ No. AFPT240288</span>
+        <span>Thai & English</span>
+      </div>
+    </section>
+
+    <section class="scene scene-client" id="client" data-chapter="client">
+      <div class="client-visual" role="img" aria-label="Illustrative portrait of a fictional airline first officer">
+        <img src="./assets/client-pilot.webp" width="1536" height="1024" alt="Fictional airline first officer in a cockpit">
+      </div>
+      <div class="client-panel reveal">
+        <p class="eyebrow">SECTION 02 / CLIENT MISSION PROFILE</p>
+        <h2>Mr. A</h2>
+        <p class="client-role">First Officer • Age 30 • High risk tolerance</p>
+        <div class="metric-row">
+          <div><span>Available cash</span><strong>THB 15M</strong></div>
+          <div><span>Legacy portfolio</span><strong>THB 2M</strong></div>
+          <div><span>Return objective</span><strong>~10% p.a.</strong></div>
+        </div>
+        <div class="diagnosis">
+          <span>Primary constraint</span>
+          <p>Limited time to monitor markets, combined with dissatisfaction with the current bank-managed portfolio.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene scene-suitability" data-chapter="client">
+      <div class="section-heading reveal">
+        <p class="eyebrow">KYC / SUITABILITY</p>
+        <h2>Risk appetite is only one part of suitability.</h2>
+        <p>The recommendation must align return ambition with time horizon, liquidity needs, and the client’s ability to withstand loss.</p>
+      </div>
+      <div class="risk-console reveal">
+        <div class="risk-gauge" aria-label="Illustrative suitability profile">
+          <div class="gauge-label"><span>Risk willingness</span><strong>HIGH</strong></div>
+          <div class="gauge-track"><i style="--score: 82%"></i></div>
+          <div class="gauge-label"><span>Risk capacity</span><strong>VERIFY</strong></div>
+          <div class="gauge-track muted"><i style="--score: 58%"></i></div>
+        </div>
+        <div class="check-grid">
+          <div><span>01</span><p>Investment objective</p><strong>Capital growth</strong></div>
+          <div><span>02</span><p>Time horizon</p><strong>Short + long term</strong></div>
+          <div><span>03</span><p>Liquidity need</p><strong>To confirm</strong></div>
+          <div><span>04</span><p>Loss capacity</p><strong>To confirm</strong></div>
+          <div><span>05</span><p>Experience</p><strong>Funds + crypto</strong></div>
+          <div><span>06</span><p>Monitoring time</p><strong>Limited</strong></div>
+        </div>
+      </div>
+      <p class="callout reveal">A 10% return is an objective, not a promise. The final portfolio must pass KYC and suitability before implementation.</p>
+    </section>
+
+    <section class="scene scene-discovery scene-qualitative" data-chapter="client">
+      <div class="section-heading reveal">
+        <p class="eyebrow">QUALITATIVE DISCOVERY / LIFE CONTEXT</p>
+        <h2>Before advising the capital, understand the person.</h2>
+        <p>Long-term suitability depends on the life this portfolio must support—not only a risk score.</p>
+      </div>
+      <div class="discovery-grid reveal">
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>01 / GOALS</span><p class="card-detail">What major goals do you expect in the next 1, 3, and 5+ years—such as a home, wedding, car, family, or education?</p></article>
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>02 / EMPLOYMENT</span><p class="card-detail">How stable is your employment and income, and do you expect any career change, unpaid leave, or relocation?</p></article>
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>03 / HEALTH</span><p class="card-detail">Do you have any health conditions or dependants that may require significant financial support?</p></article>
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>04 / PROTECTION</span><p class="card-detail">What life, health, disability, or critical-illness insurance do you currently have, and where might there be protection gaps?</p></article>
+        <article class="question-card priority-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>05 / PRIORITIES</span><p class="card-detail">Which goals are essential, and which could be delayed if markets fall or your circumstances change?</p></article>
+      </div>
+      <div class="care-callout interactive-card reveal" tabindex="0" role="button" aria-expanded="false"><strong>ADVISOR PRINCIPLE</strong><span class="card-detail">Advice starts with listening. The portfolio should adapt to Mr. A’s life—not the other way around.</span></div>
+    </section>
+
+    <section class="scene scene-discovery scene-quantitative" data-chapter="client">
+      <div class="section-heading reveal">
+        <p class="eyebrow">QUANTITATIVE DISCOVERY / FINANCIAL TELEMETRY</p>
+        <h2>Available cash is not automatically investable capital.</h2>
+        <p>THB 15M is available cash, not confirmed investable capital. The allocation remains illustrative until the financial fact-find is complete.</p>
+      </div>
+      <div class="capital-equation interactive-card reveal" tabindex="0" role="button" aria-expanded="false">
+        <span>CONFIRMED INVESTABLE CAPITAL</span>
+        <p class="card-detail">THB 15M cash <b>−</b> emergency reserve <b>−</b> near-term goals <b>−</b> known obligations</p>
+        <strong class="card-detail">= TO BE CONFIRMED</strong>
+      </div>
+      <div class="financial-equations reveal">
+        <div class="interactive-card" tabindex="0" role="button" aria-expanded="false"><span>BALANCE SHEET</span><p class="card-detail">Net wealth = Total assets − Total liabilities</p></div>
+        <div class="interactive-card" tabindex="0" role="button" aria-expanded="false"><span>CASH FLOW</span><p class="card-detail">Monthly surplus = Net income − Fixed expenses − Variable expenses − Debt service</p></div>
+      </div>
+      <div class="financial-question-grid reveal">
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>01 / ASSETS</span><p class="card-detail">What assets do you own, including cash, investments, retirement funds, property, and other valuables?</p></article>
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>02 / LIABILITIES</span><p class="card-detail">What debts and guarantees do you have, including balances, interest rates, and monthly payments?</p></article>
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>03 / INCOME</span><p class="card-detail">What is your average monthly net income from salary, allowances, bonuses, investments, and other sources?</p></article>
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>04 / EXPENSES</span><p class="card-detail">What are your fixed and variable expenses, annual premiums, taxes, travel costs, and family support?</p></article>
+        <article class="question-card interactive-card" tabindex="0" role="button" aria-expanded="false"><span>05 / LIQUIDITY</span><p class="card-detail">How much liquidity must remain outside the portfolio for emergencies and goals over the next three years?</p></article>
+      </div>
+    </section>
+
+    <section class="scene scene-balance" data-chapter="client">
+      <div class="section-heading reveal">
+        <p class="eyebrow">PERSONAL FINANCE SNAPSHOT</p>
+        <h2>Known facts first. Assumptions clearly marked.</h2>
+      </div>
+      <div class="balance-grid reveal">
+        <div class="balance-card known">
+          <p>Known financial assets</p>
+          <strong>≥ THB 17.0M</strong>
+          <ul>
+            <li><span>Available cash</span><b>THB 15.0M</b></li>
+            <li><span>Legacy funds</span><b>THB 2.0M</b></li>
+          </ul>
+        </div>
+        <div class="balance-card estimate">
+          <p>Estimated First Officer income</p>
+          <strong>THB 125K–217K</strong>
+          <small>Monthly external estimate. Illustrative midpoint: THB 170K. Confirm with the client.</small>
+        </div>
+        <div class="balance-card unknown">
+          <p>Still required</p>
+          <strong>Fact-find</strong>
+          <ul>
+            <li><span>Debt & obligations</span><b>Unknown</b></li>
+            <li><span>Emergency reserve</span><b>Unknown</b></li>
+            <li><span>Insurance & tax</span><b>Unknown</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="formula reveal">
+        <span>MONTHLY INVESTABLE CASH FLOW</span>
+        <p>Net income − living expenses − debt payments − insurance − other commitments</p>
+        <b>Result: To be confirmed during discovery</b>
+      </div>
+    </section>
+
+    <section class="scene scene-orbit" id="portfolio" data-chapter="portfolio">
+      <img class="orbit-art" src="./assets/portfolio-orbit.webp" width="1672" height="941" alt="Planet, satellite, and reserve station in space">
+      <div class="orbit-shade"></div>
+      <div class="orbit-intro reveal">
+        <p class="eyebrow">SECTION 03 / PORTFOLIO ORBIT</p>
+        <h2>One system.<br>Three distinct jobs.</h2>
+        <p>Built around a strategic core, a controlled tactical sleeve, and liquidity that preserves optionality.</p>
+      </div>
+      <div class="orbit-system" role="group" aria-label="Portfolio components moving on one shared orbital path">
+        <div class="portfolio-orbit-track" aria-hidden="true"></div>
+        <div class="orbit-label planet-label reveal" tabindex="0"><span>CORE PLANET</span><strong>70%</strong><small>THB 10.5M</small></div>
+        <div class="orbit-label satellite-label reveal" tabindex="0"><span>GEO SATELLITE</span><strong>10%</strong><small>THB 1.5M</small></div>
+        <div class="orbit-label reserve-label reveal" tabindex="0"><span>FUEL RESERVE</span><strong>20%</strong><small>THB 3.0M</small></div>
+      </div>
+    </section>
+
+    <section class="scene scene-allocation" data-chapter="portfolio">
+      <div class="allocation-visual reveal">
+        <div class="donut" role="img" aria-label="Portfolio allocation: 40 percent AWS, 30 percent Dynamic Contrarian, 10 percent Investment Call, and 20 percent reserve">
+          <div><strong>THB 15M</strong><span>NEW CAPITAL</span></div>
+        </div>
+      </div>
+      <div class="allocation-copy reveal">
+        <p class="eyebrow">TARGET ALLOCATION</p>
+        <h2>Strategic stability with controlled aggression.</h2>
+        <div class="allocation-list">
+          <div><i class="aws"></i><span>A.Stotz All Weather</span><strong>40%</strong><small>THB 6.0M</small></div>
+          <div><i class="dcm"></i><span>Dynamic Contrarian</span><strong>30%</strong><small>THB 4.5M</small></div>
+          <div><i class="call"></i><span>Investment Call</span><strong>10%</strong><small>THB 1.5M</small></div>
+          <div><i class="cash"></i><span>Money Plus / Cash</span><strong>20%</strong><small>THB 3.0M</small></div>
+        </div>
+        <p class="micro-note">The existing THB 2M portfolio remains outside this allocation until holdings, overlap, fees, currency exposure, and exit costs are reviewed.</p>
+      </div>
+    </section>
+
+    <section class="scene scene-components" data-chapter="portfolio">
+      <div class="section-heading reveal">
+        <p class="eyebrow">PORTFOLIO ARCHITECTURE</p>
+        <h2>Every component earns its place.</h2>
+      </div>
+      <div class="component-grid reveal">
+        <article class="component-card core-a">
+          <span>CORE / ATMOSPHERE</span>
+          <div class="component-number">40%</div>
+          <h3>A.Stotz All Weather</h3>
+          <p>Multi-asset diversification and quarterly rebalancing help reduce dependence on a single market regime.</p>
+          <ul><li>Medium risk</li><li>5–7% average annual target</li><li>Minimum THB 500K</li></ul>
+        </article>
+        <article class="component-card core-b">
+          <span>CORE / INNER ENGINE</span>
+          <div class="component-number">30%</div>
+          <h3>Dynamic Contrarian</h3>
+          <p>A high-risk growth engine designed to seek quality assets after meaningful price declines.</p>
+          <ul><li>High risk</li><li>8% average annual target</li><li>Minimum THB 2M</li></ul>
+        </article>
+        <article class="component-card geo">
+          <span>TACTICAL ORBIT</span>
+          <div class="component-number">10%</div>
+          <h3>Investment Call</h3>
+          <p>An investment plan that lets you track funds and follow three investment styles: Trend-Following, Contrarian, and MEVT (Long-Term), with real-time buy/sell signals and strategic guidance to support better investment decisions.</p>
+          <ul><li>Advisor-led timing</li><li>Opportunity sleeve</li><li>Minimum THB 1</li></ul>
+        </article>
+        <article class="component-card fuel">
+          <span>LIQUIDITY</span>
+          <div class="component-number">20%</div>
+          <h3>Fuel Reserve</h3>
+          <p>Cash management for near-term needs, phased deployment, and the ability to buy during market dislocations. FIN SAVE by KKP adds an app-managed savings account that can also support mutual-fund transactions.</p>
+          <ul><li>Very low risk</li><li>High liquidity</li><li>Money Plus minimum THB 5K</li><li><a href="https://www.finnomena.com/partners/kkp/landing" target="_blank" rel="noreferrer">FIN SAVE by KKP via Finnomena ↗</a></li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="scene scene-thesis" data-chapter="portfolio">
+      <div class="section-heading reveal">
+        <p class="eyebrow">2H 2026 INVESTMENT THESIS</p>
+        <h2>Stay diversified. Favor Japan. Preserve dry powder.</h2>
+      </div>
+      <div class="thesis-grid reveal">
+        <article>
+          <span class="thesis-index">01</span>
+          <h3>Regime uncertainty</h3>
+          <p>Growth remains investable, but policy, inflation, and geopolitical risks argue for a multi-asset core rather than a one-way equity bet.</p>
+        </article>
+        <article class="highlight">
+          <span class="thesis-index">02</span>
+          <h3>Japan as the tactical leader</h3>
+          <p>FINNOMENA maintained a Strong Buy view on Japan as of 7 September 2026, citing earnings revisions, AI-linked electronics, banking tailwinds, and governance reform.</p>
+        </article>
+        <article>
+          <span class="thesis-index">03</span>
+          <h3>Contrarian dispersion</h3>
+          <p>Uneven valuations create opportunities to add quality assets when fear drives prices below their longer-term potential.</p>
+        </article>
+        <article>
+          <span class="thesis-index">04</span>
+          <h3>Liquidity has value</h3>
+          <p>A 20% reserve limits forced selling and creates capacity to deploy when volatility improves prospective returns.</p>
+        </article>
+      </div>
+      <div class="aws-strip reveal">
+        <span>AWS Q3 2026 positioning</span>
+        <div><i style="--w:25%"></i><b>Japan 25%</b></div>
+        <div><i style="--w:15%"></i><b>Global equity 15%</b></div>
+        <div><i style="--w:25%"></i><b>APAC ex-Japan/China 25%</b></div>
+        <div><i style="--w:25%"></i><b>Commodities 25%</b></div>
+        <div><i style="--w:10%"></i><b>Bonds + gold 10%</b></div>
+      </div>
+    </section>
+
+    <section class="scene scene-lookthrough" data-chapter="portfolio">
+      <div class="section-heading reveal">
+        <p class="eyebrow">PORTFOLIO LOOK-THROUGH</p>
+        <h2>Four sleeves. One complete exposure.</h2>
+      </div>
+      <div class="lookthrough-table-wrap reveal">
+        <table class="lookthrough-table">
+          <thead>
+            <tr>
+              <th>Portfolio sleeve</th>
+              <th>Weight</th>
+              <th>Stocks</th>
+              <th>Bonds</th>
+              <th>Commodities + Gold</th>
+              <th>Cash</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th>A. Stotz All Weather</th><td>40%</td><td>26%</td><td>2%</td><td>12%</td><td>0%</td></tr>
+            <tr><th>Dynamic Contrarian</th><td>30%</td><td>30%</td><td>0%</td><td>0%</td><td>0%</td></tr>
+            <tr><th>UGIS-N Investment Call</th><td>10%</td><td>0%</td><td>10%</td><td>0%</td><td>0%</td></tr>
+            <tr><th>Fuel Reserve</th><td>20%</td><td>0%</td><td>0%</td><td>0%</td><td>20%</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><th>Total portfolio</th><td>100%</td><td>56%</td><td>12%</td><td>12%</td><td>20%</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <div class="exposure-summary reveal" aria-label="Total portfolio asset allocation">
+        <div class="equity"><span>STOCKS</span><strong>56%</strong></div>
+        <div class="fixed-income"><span>BONDS</span><strong>12%</strong></div>
+        <div class="real-assets"><span>COMMODITIES + GOLD</span><strong>12%</strong></div>
+        <div class="liquid"><span>CASH</span><strong>20%</strong></div>
+      </div>
+    </section>
+
+    <section class="scene scene-overlap" data-chapter="portfolio">
+      <div class="section-heading reveal">
+        <p class="eyebrow">FUND OVERLAP / LOOK-THROUGH</p>
+        <h2>Distinct funds. Shared underlying exposure.</h2>
+      </div>
+      <div class="venn-stage reveal" role="img" aria-label="Venn-Euler comparison of A. Stotz All Weather and Dynamic Contrarian fund allocations, with estimated shared underlying stock exposure of 18 to 22 percent, equal to 5.4 to 6.6 percent of the total portfolio">
+        <div class="venn-circle venn-aws">
+          <header><strong>AWS</strong><span>40% OF PORTFOLIO</span></header>
+          <ul>
+            <li class="linked"><div><b>TLA-GEQ</b><span>Talis Global Equity Allocation Fund</span><small>Master: Talis Global Equity Allocation</small></div><i>GLOBAL EQUITY</i><em>15% · 6%</em></li>
+            <li><div><b>KT-JAPANALL-A</b><span>KTAM Japan All Cap Equity Fund</span><small>Master: Fidelity Funds – Japan Value Fund</small></div><i>JAPAN EQUITY</i><em>25% · 10%</em></li>
+            <li class="linked"><div><b>TLFVMR-ASIAX</b><span>Talis FVMR Asia Pacific ex JP ex CN</span><small>Master: Multiple Asia ex JP and ex CN ETFs</small></div><i>ASIA EX JP/CN</i><em>25% · 10%</em></li>
+            <li><div><b>TLA-GFIX</b><span>Talis Global Fixed Income Allocation Fund</span><small>Master: Talis Global Fixed Income</small></div><i>GLOBAL BONDS</i><em>5% · 2%</em></li>
+            <li><div><b>SCBCOMP</b><span>SCB Commodity Plus Fund</span><small>Master: PIMCO Commodity Real Return Fund</small></div><i>COMMODITIES</i><em>25% · 10%</em></li>
+            <li><div><b>K-GOLD-A(A)</b><span>K Gold Fund-A(A)</span><small>Master: SPDR Gold Trust</small></div><i>GOLD</i><em>5% · 2%</em></li>
+          </ul>
+        </div>
+
+        <div class="venn-intersection">
+          <span>ESTIMATED SHARED HOLDINGS</span>
+          <strong>18–22%</strong>
+          <small>of underlying equity exposure</small>
+          <div class="portfolio-overlap">
+            <b>5.4–6.6%</b>
+            <span>OF TOTAL PORTFOLIO</span>
+          </div>
+          <div class="holding-cloud" aria-label="Examples of potentially shared holdings">
+            <b>NVIDIA</b><b>Microsoft</b><b>Apple</b><b>Amazon</b><b>Alphabet</b><b>Meta</b><b>TSMC</b><b>Broadcom</b><b>Samsung</b><b>SK hynix</b>
+          </div>
+        </div>
+
+        <div class="venn-circle venn-dcm">
+          <header><strong>DCM</strong><span>30% OF PORTFOLIO</span></header>
+          <ul>
+            <li class="linked"><div><b>ES-USBLUECHIP</b><span>Eastspring US Blue-chip</span><small>Master: T. Rowe Price US Blue Chip Equity Fund</small></div><i>US BLUE-CHIP</i><em>20% · 6%</em></li>
+            <li><div><b>KFCHINA-T10PLUS-A</b><span>Krungsri China Technology</span><small>Master: Invesco China Technology Equity Fund</small></div><i>CHINA TECH</i><em>20% · 6%</em></li>
+            <li class="linked"><div><b>A-ASEMI</b><span>ASP Asian Semiconductors</span><small>Master: Global X Asia Semiconductor ETF</small></div><i>ASIA SEMIS</i><em>20% · 6%</em></li>
+            <li><div><b>ONE-RAREEARTH</b><span>One Rare Earth</span><small>Master: VanEck Rare Earth and Strategic Metals ETF</small></div><i>RARE EARTH</i><em>15% · 4.5%</em></li>
+            <li class="linked"><div><b>TOP11USA</b><span>DAOL Top 11 US</span><small>Master: DAOL Top 11 US Strategy</small></div><i>US MEGA-CAP</i><em>15% · 4.5%</em></li>
+            <li><div><b>LHSOLAR</b><span>LH Solar</span><small>Master: Invesco Solar ETF</small></div><i>SOLAR</i><em>10% · 3%</em></li>
+          </ul>
+        </div>
+
+        <div class="unique-exposure unique-aws">
+          <span>AWS UNIQUE EXPOSURE</span>
+          <div><b>Global Bonds</b><small>5%</small></div><div><b>Commodities</b><small>25%</small></div><div><b>Gold</b><small>5%</small></div><div><b>Japan Equity</b><small>25%</small></div>
+        </div>
+        <div class="unique-exposure unique-dcm">
+          <span>DCM UNIQUE EXPOSURE</span>
+          <div><b>China Technology</b><small>20%</small></div><div><b>Rare Earth</b><small>15%</small></div><div><b>Solar</b><small>10%</small></div>
+        </div>
+      </div>
+      <p class="overlap-note reveal">Estimate based on available fund holdings. Confirm the latest security-level positions before implementation.</p>
+    </section>
+
+    <section class="scene scene-stylemap" data-chapter="portfolio">
+      <div class="section-heading reveal">
+        <p class="eyebrow">PORTFOLIO DIAGNOSTIC / EQUITY SLEEVE</p>
+        <h2>Different funds. Similar equity style.</h2>
+        <p>Fund diversification does not automatically remove large-growth concentration.</p>
+      </div>
+      <div class="stylemap-scroll reveal">
+        <svg class="stylemap-chart" viewBox="0 0 1100 590" role="img" aria-labelledby="stylemap-title stylemap-desc">
+          <title id="stylemap-title">Equity Style Map</title>
+          <desc id="stylemap-desc">Illustrative equity style mapping for AWS and DCM. Blue bubbles represent AWS funds, yellow bubbles represent DCM funds, and bubble area represents contribution to the total portfolio.</desc>
+
+          <rect class="map-frame" x="118" y="52" width="720" height="450" rx="3"/>
+          <g class="map-grid">
+            <line x1="358" y1="52" x2="358" y2="502"/><line x1="598" y1="52" x2="598" y2="502"/>
+            <line x1="118" y1="202" x2="838" y2="202"/><line x1="118" y1="352" x2="838" y2="352"/>
+          </g>
+          <g class="map-label">
+            <text x="238" y="34" text-anchor="middle">VALUE</text><text x="478" y="34" text-anchor="middle">BLEND</text><text x="718" y="34" text-anchor="middle">GROWTH</text>
+            <text x="94" y="130" text-anchor="end">LARGE</text><text x="94" y="280" text-anchor="end">MID</text><text x="94" y="430" text-anchor="end">SMALL</text>
+          </g>
+          <text class="map-axis" x="478" y="535" text-anchor="middle">INVESTMENT STYLE →</text>
+          <text class="map-axis" transform="translate(37 277) rotate(-90)" text-anchor="middle">MARKET CAPITALIZATION →</text>
+
+          <ellipse cx="630" cy="201" rx="184" ry="117" fill="none" stroke="rgba(245,247,242,.42)" stroke-width="1.2"/>
+          <text class="map-note" x="692" y="322" text-anchor="middle">EQUITY OWNERSHIP ZONE</text>
+
+          <g class="map-bubble aws" tabindex="0" role="button" aria-label="TLA-GEQ, 6 percent of total portfolio">
+            <circle cx="510" cy="130" r="26"/><text class="bubble-name" x="510" y="127" text-anchor="middle">TLA-GEQ</text><text class="bubble-weight" x="510" y="143" text-anchor="middle">6%</text>
+          </g>
+          <g class="map-bubble aws" tabindex="0" role="button" aria-label="KT-JAPANALL-A, 10 percent of total portfolio">
+            <circle cx="258" cy="265" r="34"/><text class="bubble-name" x="258" y="262" text-anchor="middle">JAPANALL</text><text class="bubble-weight" x="258" y="278" text-anchor="middle">10%</text>
+          </g>
+          <g class="map-bubble aws" tabindex="0" role="button" aria-label="TLFVMR-ASIAX, 10 percent of total portfolio">
+            <circle cx="488" cy="252" r="34"/><text class="bubble-name" x="488" y="249" text-anchor="middle">ASIAX</text><text class="bubble-weight" x="488" y="265" text-anchor="middle">10%</text>
+          </g>
+
+          <g class="map-bubble dcm" tabindex="0" role="button" aria-label="ES-USBLUECHIP, 6 percent of total portfolio">
+            <circle cx="700" cy="112" r="26"/><text class="bubble-name" x="700" y="109" text-anchor="middle">US BLUE</text><text class="bubble-weight" x="700" y="125" text-anchor="middle">6%</text>
+          </g>
+          <g class="map-bubble dcm" tabindex="0" role="button" aria-label="TOP11USA, 4.5 percent of total portfolio">
+            <circle cx="764" cy="154" r="23"/><text class="bubble-name" x="764" y="151" text-anchor="middle">TOP11</text><text class="bubble-weight" x="764" y="167" text-anchor="middle">4.5%</text>
+          </g>
+          <g class="map-bubble dcm" tabindex="0" role="button" aria-label="A-ASEMI, 6 percent of total portfolio">
+            <circle cx="696" cy="246" r="26"/><text class="bubble-name" x="696" y="243" text-anchor="middle">A-ASEMI</text><text class="bubble-weight" x="696" y="259" text-anchor="middle">6%</text>
+          </g>
+          <g class="map-bubble dcm" tabindex="0" role="button" aria-label="KFCHINA-T10PLUS-A, 6 percent of total portfolio">
+            <circle cx="628" cy="288" r="26"/><text class="bubble-name" x="628" y="285" text-anchor="middle">CHINA T10+</text><text class="bubble-weight" x="628" y="301" text-anchor="middle">6%</text>
+          </g>
+          <g class="map-bubble dcm" tabindex="0" role="button" aria-label="ONE-RAREEARTH, 4.5 percent of total portfolio">
+            <circle cx="398" cy="382" r="23"/><text class="bubble-name" x="398" y="379" text-anchor="middle">RARE EARTH</text><text class="bubble-weight" x="398" y="395" text-anchor="middle">4.5%</text>
+          </g>
+          <g class="map-bubble dcm" tabindex="0" role="button" aria-label="LHSOLAR, 3 percent of total portfolio">
+            <circle cx="752" cy="342" r="19"/><text class="bubble-name" x="752" y="339" text-anchor="middle">LHSOLAR</text><text class="bubble-weight" x="752" y="355" text-anchor="middle">3%</text>
+          </g>
+
+          <g aria-label="Combined equity centroid">
+            <circle cx="588" cy="212" r="17" fill="none" stroke="#f5f7f2" stroke-width="1.5"/><circle cx="588" cy="212" r="8" fill="#f5f7f2"/>
+            <line x1="588" y1="230" x2="588" y2="257" stroke="#f5f7f2"/><text class="bubble-name" x="588" y="274" text-anchor="middle">COMBINED CENTROID</text>
+          </g>
+
+          <g transform="translate(870 96)">
+            <text class="map-label" x="0" y="0">LEGEND</text>
+            <circle cx="12" cy="35" r="9" fill="rgba(76,183,255,.24)" stroke="#4cb7ff" stroke-width="2"/><text class="map-note" x="35" y="39">AWS EQUITY FUNDS</text>
+            <circle cx="12" cy="72" r="9" fill="rgba(242,249,60,.2)" stroke="#f2f93c" stroke-width="2"/><text class="map-note" x="35" y="76">DCM EQUITY FUNDS</text>
+            <circle cx="12" cy="109" r="10" fill="none" stroke="#f5f7f2"/><circle cx="12" cy="109" r="4" fill="#f5f7f2"/><text class="map-note" x="35" y="113">COMBINED CENTROID</text>
+            <circle cx="12" cy="154" r="13" fill="none" stroke="#82909c"/><circle cx="12" cy="154" r="7" fill="none" stroke="#82909c"/><text class="map-note" x="35" y="151">BUBBLE AREA</text><text class="map-note" x="35" y="167">TOTAL PORTFOLIO WEIGHT</text>
+            <line x1="0" y1="202" x2="190" y2="202" stroke="rgba(151,174,193,.4)"/>
+            <text x="0" y="238" fill="#f2f93c" font-family="Orbitron, monospace" font-size="21">56% EQUITY</text>
+            <text class="map-note" x="0" y="266">MOST EXPOSURE SITS IN</text><text class="map-note" x="0" y="283">LARGE / MID GROWTH.</text>
+          </g>
+          <text class="map-note" x="118" y="574">ILLUSTRATIVE MAPPING • VERIFY WITH LATEST HOLDINGS AND STYLE METRICS BEFORE IMPLEMENTATION</text>
+        </svg>
+      </div>
+      <p class="stylemap-mobile-note">SWIPE HORIZONTALLY TO INSPECT THE FULL MAP</p>
+    </section>
+
+    <section class="scene scene-ugis" data-chapter="portfolio">
+      <div class="ugis-heading reveal">
+        <div>
+          <p class="eyebrow">SECTION 03 / UGIS-N INVESTMENT CALL</p>
+          <h2>More bonds. Better balance.<br><span>Active control.</span></h2>
+        </div>
+        <div class="ugis-allocation" aria-label="Ten percent of the total portfolio"><span>TACTICAL ALLOCATION</span><strong>10%</strong></div>
+      </div>
+
+      <div class="ugis-grid reveal">
+        <div class="ugis-logic">
+          <article class="ugis-card">
+            <span class="ugis-id">01 / PORTFOLIO ROLE</span>
+            <h3>Increase bond exposure</h3>
+            <p>The sleeve raises total bond weight beyond the small fixed-income allocation already inside AWS.</p>
+            <div class="ugis-bond-shift" aria-label="Bond allocation increases from two percent to twelve percent">
+              <div class="ugis-bond-value"><span>BEFORE</span><strong>2%</strong></div><i aria-hidden="true">→</i><div class="ugis-bond-value after"><span>AFTER UGIS-N</span><strong>12%</strong></div>
+            </div>
+          </article>
+          <article class="ugis-card">
+            <span class="ugis-id">02 / RISK OBJECTIVE</span>
+            <h3>Target lower portfolio SD</h3>
+            <p>Global bonds can diversify an equity-led core. The realized risk effect depends on correlations, credit spreads, and interest-rate moves.</p>
+            <div class="ugis-risk" aria-hidden="true">
+              <div class="ugis-risk-labels"><span>EQUITY CONCENTRATION</span><span>DIVERSIFIED MIX</span></div>
+              <div class="ugis-risk-track"><span></span></div>
+              <div class="ugis-risk-note"><b>OBJECTIVE</b><span>Lower volatility, not a guarantee</span></div>
+            </div>
+          </article>
+        </div>
+
+        <article class="ugis-cockpit">
+          <div class="ugis-cockpit-head">
+            <div><span class="ugis-id">03 / RATE-RISK CONTROL</span><h3>Use active management around policy uncertainty</h3><p>The 15 to 16 September FOMC meeting is an event risk. A hike is a scenario, not a certainty.</p></div>
+            <span class="ugis-chip">FOMC · 15–16 SEP 2026</span>
+          </div>
+          <div class="ugis-formula" aria-label="Approximate bond price sensitivity formula"><span>ILLUSTRATIVE RATE SHOCK</span><div>ΔP / P ≈ −D<small>mod</small> × Δy</div></div>
+          <div class="ugis-shocks">
+            <div><span>REFERENCE DURATION</span><strong>6.38</strong><small>years, as of 30 Jun 2026</small></div>
+            <div><span>IF YIELDS RISE</span><strong>+25 bp</strong><small>illustrative parallel shift</small></div>
+            <div><span>EST. PORTFOLIO EFFECT</span><strong>−0.16%</strong><small>−1.60% fund impact × 10% weight</small></div>
+          </div>
+          <div class="ugis-levers"><span>ACTIVE LEVERS</span><b>Duration</b><b>Yield curve</b><b>Credit</b><b>Sector mix</b></div>
+        </article>
+      </div>
+      <div class="ugis-decision reveal"><span>WHY UGIS-N?</span><strong>PIMCO GIS Income Fund exposure through a cost-conscious feeder selected from the compared choices.</strong><small>Reconfirm TER and factsheet before execution.</small></div>
+      <p class="ugis-source reveal">Sources: FINNOMENA MEVT Call, 11 Aug 2026 · Federal Reserve FOMC calendar · PIMCO GIS Income Fund. Duration estimate excludes carry, convexity, credit-spread changes, FX effects, and active repositioning.</p>
+    </section>
+
+    <section class="scene scene-frontier" data-chapter="portfolio">
+      <div class="section-heading reveal">
+        <p class="eyebrow">SECTION 03 / PORTFOLIO SUMMARY</p>
+        <h2>Risk calibrated. Return optimized.</h2>
+        <p>The portfolio targets the highest expected return for its selected level of risk.</p>
+      </div>
+
+      <div class="frontier-layout reveal">
+        <div class="frontier-chart-scroll" aria-label="Scrollable efficient frontier chart">
+          <div class="frontier-chart-shell">
+            <svg class="frontier-chart" viewBox="0 0 1000 560" role="img" aria-labelledby="frontier-title frontier-desc">
+              <title id="frontier-title">Illustrative efficient frontier and designed portfolio</title>
+              <desc id="frontier-desc">A capital market line touches the efficient frontier once. The designed portfolio is highlighted by a pulsing aircraft-radar marker at approximately thirteen percent annualized volatility.</desc>
+
+              <g class="ef-grid" aria-hidden="true">
+                <line x1="90" y1="100" x2="930" y2="100"/><line x1="90" y1="190" x2="930" y2="190"/>
+                <line x1="90" y1="280" x2="930" y2="280"/><line x1="90" y1="370" x2="930" y2="370"/>
+                <line x1="90" y1="460" x2="930" y2="460"/>
+                <line x1="250" y1="70" x2="250" y2="480"/><line x1="410" y1="70" x2="410" y2="480"/>
+                <line x1="570" y1="70" x2="570" y2="480"/><line x1="730" y1="70" x2="730" y2="480"/>
+                <line x1="890" y1="70" x2="890" y2="480"/>
+              </g>
+
+              <g aria-hidden="true">
+                <line class="ef-axis" x1="90" y1="480" x2="940" y2="480"/>
+                <polyline class="ef-axis" points="931,474 940,480 931,486" fill="none"/>
+                <line class="ef-axis" x1="90" y1="480" x2="90" y2="60"/>
+                <polyline class="ef-axis" points="84,69 90,60 96,69" fill="none"/>
+              </g>
+
+              <g class="ef-tick" aria-hidden="true">
+                <text x="75" y="464" text-anchor="end">4–5%</text>
+                <text x="75" y="374" text-anchor="end">6%</text>
+                <text x="75" y="284" text-anchor="end">8%</text>
+                <text x="75" y="194" text-anchor="end">10%</text>
+                <text x="75" y="104" text-anchor="end">12%</text>
+                <text x="490" y="506" text-anchor="middle">~13%</text>
+              </g>
+              <text class="ef-axis-label" x="510" y="538" text-anchor="middle">EXPECTED RISK / ANNUALIZED STANDARD DEVIATION →</text>
+              <text class="ef-axis-label" transform="translate(27 280) rotate(-90)" text-anchor="middle">EXPECTED RETURN →</text>
+
+              <line class="ef-cml" x1="90" y1="460" x2="850" y2="95"/>
+              <path class="ef-frontier" d="M330 445 C390 370 520 273 610 230 C700 189 815 160 920 150"/>
+
+              <line class="ef-guide" x1="490" y1="280" x2="490" y2="480"/>
+              <line class="ef-marker-line" x1="476" y1="273" x2="358" y2="226"/>
+              <text class="ef-marker-label" x="345" y="217" text-anchor="end">DESIGNED PORTFOLIO</text>
+              <text class="ef-marker-detail" x="345" y="238" text-anchor="end">8–12% return · ~13% SD</text>
+
+              <g class="radar-target" aria-label="Designed portfolio radar signal">
+                <circle class="radar-ring r1" cx="490" cy="280" r="18"/>
+                <circle class="radar-ring r2" cx="490" cy="280" r="18"/>
+                <circle class="radar-ring r3" cx="490" cy="280" r="18"/>
+                <line class="radar-cross" x1="453" y1="280" x2="527" y2="280"/>
+                <line class="radar-cross" x1="490" y1="243" x2="490" y2="317"/>
+                <line class="radar-sweep" x1="490" y1="280" x2="531" y2="280"/>
+                <circle class="radar-core" cx="490" cy="280" r="10"/>
+                <circle class="radar-core-dot" cx="490" cy="280" r="3.5"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        <aside class="frontier-summary" aria-label="Portfolio summary">
+          <span>FINAL PORTFOLIO</span>
+          <strong>8–12%</strong>
+          <small>EXPECTED RETURN</small>
+          <hr>
+          <div class="frontier-stat"><span>EXPECTED RISK</span><b>~13%</b></div>
+          <div class="frontier-stat"><span>RISK-FREE</span><b>4–5%</b></div>
+          <p class="frontier-objective">Maximize expected return for the <b>selected risk level.</b></p>
+        </aside>
+      </div>
+      <p class="frontier-note reveal">Illustrative location. Exact positioning requires expected-return, volatility, and covariance estimates. Use a THB-consistent risk-free benchmark for final advice.</p>
+    </section>
+
+    <section class="scene scene-execution" id="execution" data-chapter="execution">
+      <div class="section-heading reveal">
+        <p class="eyebrow">MISSION EXECUTION</p>
+        <h2>Advice continues after the portfolio is launched.</h2>
+      </div>
+      <ol class="flight-plan reveal">
+        <li><span>01</span><div><h3>Complete discovery</h3><p>Confirm liabilities, expenses, insurance, emergency liquidity, tax position, and the true investment horizon.</p></div></li>
+        <li><span>02</span><div><h3>Audit the THB 2M legacy portfolio</h3><p>Review holdings, overlap, performance, fees, currency exposure, and redemption conditions before recommending changes.</p></div></li>
+        <li><span>03</span><div><h3>Deploy by mandate</h3><p>Fund the reserve, establish AWS, follow Dynamic Contrarian signals, and use Investment Call only for qualified opportunities.</p></div></li>
+        <li><span>04</span><div><h3>Monitor and rebalance</h3><p>Provide regular portfolio updates, suitability reviews, and disciplined rebalancing when allocation or client circumstances change.</p></div></li>
+      </ol>
+      <div class="success-grid reveal">
+        <div><span>Portfolio success</span><strong>Risk-adjusted progress</strong><small>Measured against objective, benchmark, drawdown, and suitability</small></div>
+        <div><span>Advisor success</span><strong>Client confidence</strong><small>Clear communication, timely follow-up, retention, and appropriate action</small></div>
+      </div>
+    </section>
+
+    <section class="scene scene-close" data-chapter="execution">
+      <div class="closing reveal">
+        <p class="eyebrow">FINAL TRANSMISSION</p>
+        <blockquote>A successful portfolio is not the one that wins in every market. It is the one the client can understand, maintain, and stay invested in.</blockquote>
+        <div class="signature">
+          <strong>Pisek Tussananakajit, AFPT™</strong>
+          <span>Prepared for the Investment Advisor case interview</span>
+        </div>
+      </div>
+      <footer class="sources reveal">
+        <p><strong>Sources and notes</strong> • Information accessed September 2026.</p>
+        <div>
+          <a href="https://port.finnomena.com/plan-select/plans" target="_blank" rel="noreferrer">FINNOMENA investment plans ↗</a>
+          <a href="https://www.finnomena.com/finnomenafunds/aws-seminar-sep26/" target="_blank" rel="noreferrer">AWS Q3 rebalance ↗</a>
+          <a href="https://www.finnomena.com/finnomenafunds/funds-call-2026/" target="_blank" rel="noreferrer">Investment Call view ↗</a>
+          <a href="https://career.thaiairways.com/" target="_blank" rel="noreferrer">Thai Airways careers ↗</a>
+          <a href="https://aviationa2z.com/" target="_blank" rel="noreferrer">External salary estimate ↗</a>
+        </div>
+        <small>This case study is prepared for interview and educational purposes. It is not an offer, guarantee, or personal investment recommendation. Final advice is subject to complete KYC, suitability assessment, current fund documents, and prevailing market conditions. Past performance does not guarantee future results.</small>
+      </footer>
+    </section>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>
